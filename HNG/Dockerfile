@@ -1,30 +1,26 @@
-# Stage 1: Build Environment
-# Use the .NET 8 SDK to build the application.
+# Stage 1: Build the application
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
 WORKDIR /app
 
-# Copy the solution file and project files.
-# This leverages Docker's layer caching, so 'dotnet restore' is only re-run when projects change.
-COPY *.sln .
-COPY HNG/*.csproj ./HNG/
-RUN dotnet restore
+# Copy everything into the container
+COPY . ./
 
-# Copy the rest of the source code.
-COPY HNG/. ./HNG/
+# Restore dependencies for the solution
+RUN dotnet restore HNGTAsk2.sln
 
-# Publish the project.
-RUN dotnet publish "HNG.csproj" -c Release -o /app/out
+# Publish the app to a release folder
+RUN dotnet publish HNGTAsk2.sln -c Release -o out
 
-# Stage 2: Runtime Environment
-# Use the smaller ASP.NET runtime image for the final, production-ready container.
+# Stage 2: Runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
-COPY --from=build-env /app/out .
 
-# Set the environment variable for the URLs the app will listen on.
+# Copy the published output from the build stage
+COPY --from=build-env /app/out ./
+
+# Tell ASP.NET to listen on all interfaces and port 8080
 ENV ASPNETCORE_URLS=http://+:8080
-# Expose the port the app will run on.
 EXPOSE 8080
 
-# Define the entry point for the container. This command starts your application.
+# Start the application
 ENTRYPOINT ["dotnet", "HNG.dll"]
