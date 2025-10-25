@@ -47,6 +47,7 @@ builder.Services.Configure<ForwardedHeadersOptions>(options =>
 
 
 builder.Services.AddEndpointsApiExplorer();
+builder.WebHost.UseUrls("http://0.0.0.0:8080");
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
@@ -56,6 +57,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.MapGet("/api/health", () => Results.Ok("alive"));
 
 // Use Forwarded Headers middleware before other middleware.
 app.UseForwardedHeaders();
