@@ -5,16 +5,15 @@ WORKDIR /app
 
 # Copy the solution file and project files.
 # This leverages Docker's layer caching, so 'dotnet restore' is only re-run when projects change.
-COPY HNGTAsk2.sln .
-COPY HNG/HNG.csproj ./HNG/
-RUN dotnet restore HNGTAsk2.sln
+COPY *.sln .
+COPY HNG/*.csproj ./HNG/
+RUN dotnet restore
 
 # Copy the rest of the source code.
-COPY . ./
+COPY HNG/. ./HNG/
 
 # Publish the project.
-WORKDIR /app/HNG
-RUN dotnet publish -c Release -o /app/out
+RUN dotnet publish "HNG.csproj" -c Release -o /app/out
 
 # Stage 2: Runtime Environment
 # Use the smaller ASP.NET runtime image for the final, production-ready container.
