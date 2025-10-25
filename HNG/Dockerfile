@@ -1,8 +1,11 @@
 # Stage 1: Build the application
+# Use the official .NET 8 SDK image which contains the tools to build your app.
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /app
 
-# Copy the .csproj file and restore dependencies first to leverage Docker layer caching.
+# Copy the project file and restore dependencies. This is done in a separate step
+# to take advantage of Docker's layer caching. If the project file hasn't changed,
+# Docker will reuse the cached layer from a previous build, speeding things up.
 COPY *.csproj ./
 RUN dotnet restore
 
@@ -13,6 +16,7 @@ COPY . ./
 RUN dotnet publish -c Release -o out
 
 # Stage 2: Create the final runtime image
+# Use the smaller ASP.NET runtime image which is optimized for running the app.
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
 COPY --from=build /app/out .

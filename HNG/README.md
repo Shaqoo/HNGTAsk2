@@ -16,7 +16,7 @@ A RESTful API service built with ASP.NET Core that analyzes strings, computes th
 
 ## Technologies Used
 
--   [.NET 9](https://dotnet.microsoft.com/en-us/download/dotnet/9.0)
+-   [.NET 8](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
 -   [ASP.NET Core](https://dotnet.microsoft.com/apps/aspnet)
 -   [Docker](https://www.docker.com/)
 
@@ -28,7 +28,7 @@ You can run this project either locally using the .NET SDK or as a Docker contai
 
 ### Prerequisites
 
--   **For Local Development:** [.NET 9 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/9.0)
+-   **For Local Development:** [.NET 8 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
 -   **For Containerization:** [Docker Desktop](https://www.docker.com/products/docker-desktop/)
 
 ### Option 1: Running Locally
