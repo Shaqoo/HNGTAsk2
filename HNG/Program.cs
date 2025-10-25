@@ -47,7 +47,6 @@ builder.Services.Configure<ForwardedHeadersOptions>(options =>
 
 
 builder.Services.AddEndpointsApiExplorer();
-builder.WebHost.UseUrls("http://0.0.0.0:8080");
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();

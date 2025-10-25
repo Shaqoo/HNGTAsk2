@@ -1,25 +1,26 @@
-# Stage 1: Build the application
-# Use the official .NET 8 SDK image which contains the tools to build your app.
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+# Stage 1: Build Environment
+# Use the .NET 8 SDK to build the application.
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
 WORKDIR /app
 
-# Copy the project file and restore dependencies. This is done in a separate step
-# to take advantage of Docker's layer caching. If the project file hasn't changed,
-# Docker will reuse the cached layer from a previous build, speeding things up.
-COPY *.csproj ./
-RUN dotnet restore
+# Copy the solution file and project files.
+# This leverages Docker's layer caching, so 'dotnet restore' is only re-run when projects change.
+COPY HNGTAsk2.sln .
+COPY HNG/HNG.csproj ./HNG/
+RUN dotnet restore HNGTAsk2.sln
 
-# Copy the rest of the application's source code.
+# Copy the rest of the source code.
 COPY . ./
 
-# Publish the application, creating a release build.
-RUN dotnet publish -c Release -o out
+# Publish the project.
+WORKDIR /app/HNG
+RUN dotnet publish -c Release -o /app/out
 
-# Stage 2: Create the final runtime image
-# Use the smaller ASP.NET runtime image which is optimized for running the app.
+# Stage 2: Runtime Environment
+# Use the smaller ASP.NET runtime image for the final, production-ready container.
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /app
-COPY --from=build /app/out .
+COPY --from=build-env /app/out .
 
 # Set the environment variable for the URLs the app will listen on.
 ENV ASPNETCORE_URLS=http://+:8080

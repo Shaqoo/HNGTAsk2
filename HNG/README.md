@@ -56,12 +56,12 @@ The API will be available at `http://localhost:5086`. You can access the Swagger
 
 1.  **Clone the repository:**
     ```sh
-    git clone https://github.com/phurhard/HNG.git
-    cd HNG
+    git clone https://github.com/phurhard/HNG.git HNGTAsk2
+    cd HNGTAsk2
     ```
 
 2.  **Build the Docker image:**
-    From the root of the project directory (where the `Dockerfile` is located), run the following command:
+    From the root of the solution directory (`HNGTAsk2`), run the following command:
     ```sh
     docker build -t hng-string-analyzer .
     ```
