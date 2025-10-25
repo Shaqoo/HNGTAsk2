@@ -63,10 +63,11 @@ app.MapGet("/api/health", () => Results.Ok("alive"));
 // Use Forwarded Headers middleware before other middleware.
 app.UseForwardedHeaders();
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 
 app.UseCors(myAllowSpecificOrigins);
 app.UseRateLimiter();
+Console.WriteLine("Starting HNGTAsk2 Web API...");
 
 
 app.MapControllers().RequireRateLimiting("fixed");
